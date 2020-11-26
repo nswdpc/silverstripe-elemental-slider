@@ -22,7 +22,10 @@
         "key" : "value"
     },
     "require": {
-        "package" : "^version"
+        "dnadesign/silverstripe-elemental": "^4.3.0",
+        "bummzack/sortablefile" : "^2.1",
+        "silverstripe/assets" : "^1",
+        "silverstripe/asset-admin" : "^1"
     },
     "replace" : {
         "package" : "version"
