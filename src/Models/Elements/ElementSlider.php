@@ -3,6 +3,8 @@ namespace NSWDPC\Elemental\Models\Slider;
 
 use NSWDPC\Elemental\Models\Slider\Slide;
 use DNADesign\Elemental\Models\ElementContent;
+use gorriecoe\Link\Models\Link;
+use gorriecoe\LinkField\LinkField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
@@ -38,6 +40,10 @@ class ElementSlider extends ElementContent {
         'HomepageHero' => 'Boolean'
     ];
 
+    private static $has_one = [
+        'HeroLink' => Link::class
+    ];
+
     private static $has_many = [
         'Slides' => Slide::class,
     ];
@@ -50,17 +56,21 @@ class ElementSlider extends ElementContent {
     {
         $this->beforeUpdateCMSFields(function($fields)
         {
-                $fields->removeByName(['Slides']);
+                $fields->removeByName(['HeroLinkID', 'Slides']);
 
                 $fields->addFieldToTab(
                     'Root.Main',
-                    CheckboxField::create(
-                        'HomepageHero',
-                        _t(
-                            __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
+                        CheckboxField::create(
+                            'HomepageHero',
+                            _t(
+                                __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
+                            )
                         )
-                    ),
-                    'HTML'
+                );
+
+                $fields->addFieldToTab(
+                    'Root.Main',
+                        $this->getLinkField()
                 );
 
                 if ($this->isInDB()) {
@@ -79,6 +89,18 @@ class ElementSlider extends ElementContent {
 
             });
         return parent::getCMSFields();
+    }
+
+    protected function getLinkField() {
+        $field = LinkField::create(
+            'HeroLink',
+            _t(
+                __CLASS__ . '.LINK',
+                'Link'
+            ),
+            $this
+        );
+        return $field;
     }
 
     public function SortedSlides() {

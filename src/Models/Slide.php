@@ -33,6 +33,7 @@ class Slide extends DataObject {
 
     private static $db = [
         'Title' => 'Varchar(255)',
+        'Content' => 'Text',
         'Sort' => 'Int',
         'Width' => 'Int',
         'Height' => 'Int'
@@ -96,7 +97,19 @@ class Slide extends DataObject {
 
         $fields->addFieldsToTab(
             'Root.Main', [
-                LinkField::create('Link', 'Link', $this->owner),
+                TextareaField::create(
+                    'Content',
+                    _t(
+                        __CLASS__ . 'CONTENT', 'Content'
+                    )
+                ),
+                LinkField::create(
+                    'Link',
+                    _t(
+                        __CLASS__ . 'LINK', 'Link'
+                    ),
+                    $this->owner
+                ),
                 NumericField::create(
                     'Width',
                     _t(
