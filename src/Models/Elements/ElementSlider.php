@@ -19,7 +19,7 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
  */
 class ElementSlider extends ElementContent {
 
-    private static $icon = 'font-icon-thumbnails';
+    private static $icon = 'font-icon-picture';
 
     private static $inline_editable = false;
 
