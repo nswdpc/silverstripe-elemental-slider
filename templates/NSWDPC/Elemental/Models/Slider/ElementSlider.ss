@@ -1,9 +1,9 @@
 <div class="{$ElementStyles}">
     <div class="slider-element__content">
-	    <% if $ShowTitle %>
+        <% if $ShowTitle %>
             <h2 class="content-element__title">{$Title.XML}</h2>
         <% end_if %>
-	   $HTML
+       {$HTML}
     </div>
     <% if $Slides %>
         <div class="slider-element__slides">
