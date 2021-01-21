@@ -7,7 +7,7 @@ use gorriecoe\Link\Models\Link;
 use gorriecoe\LinkField\LinkField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
@@ -54,41 +54,42 @@ class ElementSlider extends ElementContent {
 
     public function getCMSFields()
     {
-        $this->beforeUpdateCMSFields(function($fields)
-        {
-            $fields->removeByName(['HeroLinkID', 'Slides']);
+        $fields = parent::getCmsFields();
+        $fields->removeByName(['HeroLinkID']);
 
-            $fields->addFieldToTab(
-                'Root.Main',
-                    CheckboxField::create(
-                        'HomepageHero',
-                        _t(
-                            __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
-                        )
+        $fields->addFieldToTab(
+            'Root.Main',
+                CheckboxField::create(
+                    'HomepageHero',
+                    _t(
+                        __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
                     )
-            );
+                )
+        );
 
+        $fields->addFieldToTab(
+            'Root.Main',
+                $this->getLinkField()
+        );
+
+        if ($this->isInDB()) {
+            $field = GridField::create(
+                'Slides',
+                _t(
+                    __CLASS__ . 'SLIDES', 'Slides'
+                ),
+                $this->Slides(),
+                GridFieldConfig_RelationEditor::create()
+            );
+            $config = $field->getConfig();
+            $config->addComponent(GridFieldOrderableRows::create('Sort'));
             $fields->addFieldToTab(
-                'Root.Main',
-                    $this->getLinkField()
+                'Root.Slides',
+                $field
             );
+        }
 
-            if ($this->isInDB()) {
-                $fields->addFieldToTab(
-                    'Root.Main',
-                    GridField::create(
-                        'Slides',
-                        _t(
-                            __CLASS__ . 'SLIDES', 'Slides'
-                        ),
-                        $this->Slides(), $config = GridFieldConfig_RecordEditor::create()
-                    )
-                );
-                $config->addComponent(GridFieldOrderableRows::create());
-            }
-
-        });
-        return parent::getCMSFields();
+        return $fields;
     }
 
     protected function getLinkField() {
