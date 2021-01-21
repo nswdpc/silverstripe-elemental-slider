@@ -48,6 +48,15 @@ class Slide extends DataObject {
     private static $summary_fields = [
         'Image.CMSThumbnail' => 'Image',
         'Title' => 'Title',
+        'Width' => 'Width',
+        'Height' => 'Height',
+        'Link.TypeLabel' => 'Link type',
+        'Link.LinkURL' => 'Link URL'
+    ];
+
+    private static $searchable_fields = [
+        'Title' => 'PartialMatchFilter',
+        'Content' => 'PartialMatchFilter'
     ];
 
     private static $owns = [
