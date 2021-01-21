@@ -56,38 +56,38 @@ class ElementSlider extends ElementContent {
     {
         $this->beforeUpdateCMSFields(function($fields)
         {
-                $fields->removeByName(['HeroLinkID', 'Slides']);
+            $fields->removeByName(['HeroLinkID', 'Slides']);
 
+            $fields->addFieldToTab(
+                'Root.Main',
+                    CheckboxField::create(
+                        'HomepageHero',
+                        _t(
+                            __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
+                        )
+                    )
+            );
+
+            $fields->addFieldToTab(
+                'Root.Main',
+                    $this->getLinkField()
+            );
+
+            if ($this->isInDB()) {
                 $fields->addFieldToTab(
                     'Root.Main',
-                        CheckboxField::create(
-                            'HomepageHero',
-                            _t(
-                                __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
-                            )
-                        )
+                    GridField::create(
+                        'Slides',
+                        _t(
+                            __CLASS__ . 'SLIDES', 'Slides'
+                        ),
+                        $this->Slides(), $config = GridFieldConfig_RecordEditor::create()
+                    )
                 );
+                $config->addComponent(GridFieldOrderableRows::create());
+            }
 
-                $fields->addFieldToTab(
-                    'Root.Main',
-                        $this->getLinkField()
-                );
-
-                if ($this->isInDB()) {
-                    $fields->addFieldToTab(
-                        'Root.Main',
-                        GridField::create(
-                            'Slides',
-                            _t(
-                                __CLASS__ . 'SLIDES', 'Slides'
-                            ),
-                            $this->Slides(), $config = GridFieldConfig_RecordEditor::create()
-                        )
-                    );
-                    $config->addComponent(GridFieldOrderableRows::create());
-                }
-
-            });
+        });
         return parent::getCMSFields();
     }
 
