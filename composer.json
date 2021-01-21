@@ -22,6 +22,8 @@
         }
     ],
     "require": {
+        "symbiote/silverstripe-gridfieldextensions" : "^3",
+        "gorriecoe/silverstripe-linkfield" : "^1",
         "dnadesign/silverstripe-elemental": "^4.3.0",
         "bummzack/sortablefile" : "^2.1",
         "silverstripe/assets" : "^1",
