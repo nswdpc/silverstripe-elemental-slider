@@ -124,13 +124,13 @@ class Slide extends DataObject {
                     _t(
                         __CLASS__ . 'WIDTH', 'Thumbnail width'
                     )
-                ),
+                )->setHtml5(true),
                 NumericField::create(
                     'Height',
                     _t(
                         __CLASS__ . 'WIDTH', 'Thumbnail height'
                     )
-                ),
+                )->setHtml5(true),
                 UploadField::create(
                     'Image',
                     _t(
