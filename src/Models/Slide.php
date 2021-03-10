@@ -9,7 +9,7 @@ use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TextareaField;
 use gorriecoe\Link\Models\Link;
-use gorriecoe\LinkField\LinkField;
+use NSWDPC\InlineLinker\InlineLinkCompositeField;
 
 use NSWDPC\Elemental\Models\Slider\ElementSlider;
 
@@ -112,7 +112,7 @@ class Slide extends DataObject {
                         __CLASS__ . 'CONTENT', 'Content'
                     )
                 ),
-                LinkField::create(
+                InlineLinkCompositeField::create(
                     'Link',
                     _t(
                         __CLASS__ . 'LINK', 'Link'

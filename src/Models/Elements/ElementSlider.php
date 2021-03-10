@@ -4,7 +4,7 @@ namespace NSWDPC\Elemental\Models\Slider;
 use NSWDPC\Elemental\Models\Slider\Slide;
 use DNADesign\Elemental\Models\ElementContent;
 use gorriecoe\Link\Models\Link;
-use gorriecoe\LinkField\LinkField;
+use NSWDPC\InlineLinker\InlineLinkCompositeField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
@@ -93,7 +93,7 @@ class ElementSlider extends ElementContent {
     }
 
     protected function getLinkField() {
-        $field = LinkField::create(
+        $field = InlineLinkCompositeField::create(
             'HeroLink',
             _t(
                 __CLASS__ . '.LINK',
