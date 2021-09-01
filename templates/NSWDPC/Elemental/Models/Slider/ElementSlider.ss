@@ -5,7 +5,7 @@
         <% end_if %>
        {$HTML}
     </div>
-    <% if $Slides %>
+    <% if $SortedSlides %>
         <div class="slider-element__slides">
             <% loop $SortedSlides %>
                 <div>

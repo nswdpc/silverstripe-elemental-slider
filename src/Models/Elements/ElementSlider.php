@@ -52,6 +52,23 @@ class ElementSlider extends ElementContent {
         'Slides'
     ];
 
+    /**
+     * @inheritDoc
+     */
+    public function forTemplate($holder = true)
+    {
+        $this->addSliderRequirements();
+        return parent::forTemplate($holder);
+    }
+
+    /**
+     * Provides an extension method 'sliderRequirements' where Requirements can
+     * be added to handle slider content
+     */
+    protected function addSliderRequirements() {
+        $this->extend('sliderRequirements');
+    }
+
     public function getCMSFields()
     {
         $fields = parent::getCmsFields();
