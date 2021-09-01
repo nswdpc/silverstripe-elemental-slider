@@ -63,7 +63,7 @@ Add project configuration, in the standard Silverstripe way.
 ```yaml
 NSWDPC\Elemental\Models\Slider\ElementSlider:
   extensions:
-    - 'My\Project\Extensions\Extensions\ElementSliderExtension'
+    - 'My\Project\Extensions\ElementSliderExtension'
 ```
 
 ### Modify HTML templates
@@ -72,5 +72,5 @@ Override the following templates in your project or project theme to use your ow
 
 ```shell
 templates/Includes/SlideImage.ss -> a slide image
-templates/NSWDPC/Elemental/Models/Slider.ss -> the slider HTML
+templates/NSWDPC/Elemental/Models/ElementSlider.ss -> the slider HTML
 ```
