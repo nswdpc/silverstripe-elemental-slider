@@ -22,12 +22,12 @@
         }
     ],
     "require": {
-        "symbiote/silverstripe-gridfieldextensions" : "^3",
+        "symbiote/silverstripe-gridfieldextensions" : "^4",
         "gorriecoe/silverstripe-linkfield" : "^1",
-        "dnadesign/silverstripe-elemental": "^4.9.0",
-        "bummzack/sortablefile" : "^2.1",
-        "silverstripe/assets" : "^1",
-        "silverstripe/asset-admin" : "^1",
+        "dnadesign/silverstripe-elemental": "^5",
+        "bummzack/sortablefile" : "^2.2",
+        "silverstripe/assets" : "^2",
+        "silverstripe/asset-admin" : "^2",
         "nswdpc/silverstripe-inline-linker": "dev-master"
     },
     "require-dev": {
