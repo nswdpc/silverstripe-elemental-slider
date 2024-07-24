@@ -19,35 +19,73 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
  */
 class ElementSlider extends ElementContent {
 
+    /**
+     * @inheritdoc
+     */
     private static $icon = 'font-icon-picture';
 
+    /**
+     * @inheritdoc
+     */
     private static $inline_editable = false;
 
+    /**
+     * @inheritdoc
+     */
     private static $table_name = 'ElementSlider';
 
+    /**
+     * @inheritdoc
+     */
     private static $title = 'Content slider';
+
+    /**
+     * @inheritdoc
+     */
     private static $description = "Display one or more slides with optional hero";
 
+    /**
+     * @inheritdoc
+     */
     private static $singular_name = 'Slider';
+
+    /**
+     * @inheritdoc
+     */
     private static $plural_name = 'Sliders';
 
+    /**
+     * @inheritdoc
+     */
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Content slider');
     }
 
+    /**
+     * @inheritdoc
+     */
     private static $db = [
         'HomepageHero' => 'Boolean'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $has_one = [
         'HeroLink' => Link::class
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $has_many = [
         'Slides' => Slide::class,
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $owns = [
         'Slides'
     ];
@@ -69,6 +107,9 @@ class ElementSlider extends ElementContent {
         $this->extend('sliderRequirements');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCMSFields()
     {
         $fields = parent::getCmsFields();
@@ -79,7 +120,8 @@ class ElementSlider extends ElementContent {
                 CheckboxField::create(
                     'HomepageHero',
                     _t(
-                        __CLASS__ . 'HOMEPAGE_HERO', 'Use this on the homepage to show the site logo'
+                        __CLASS__ . 'HOMEPAGE_HERO',
+                        'The context for this slider is a \'hero\''
                     )
                 )
         );
@@ -109,6 +151,9 @@ class ElementSlider extends ElementContent {
         return $fields;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function getLinkField() {
         $field = InlineLinkCompositeField::create(
             'HeroLink',
@@ -121,6 +166,9 @@ class ElementSlider extends ElementContent {
         return $field;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function SortedSlides() {
         return $this->Slides()->Sort('Sort');
     }

@@ -1,1 +1,5 @@
-<img src="{$Image.FillMax($Width,$Height).URL}" alt="<% if $Title %>{$Title.XML}<% end_if %>" width="$Width" height="$Height" loading="lazy">
+<% if $Width && $Height %>
+    {$Image.FillMax($Width,$Height)}
+<% else %>
+    {$Image.FillMax(128,96)}
+<% end_if %>

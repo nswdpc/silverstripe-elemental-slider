@@ -56,7 +56,7 @@ class ElementSliderExtension extends Extension
 }
 ```
 
-### Apply the configuration 
+### Apply the configuration
 
 Add project configuration, in the standard Silverstripe way.
 
@@ -72,5 +72,8 @@ Override the following templates in your project or project theme to use your ow
 
 ```shell
 templates/Includes/SlideImage.ss -> a slide image
-templates/NSWDPC/Elemental/Models/ElementSlider.ss -> the slider HTML
+templates/NSWDPC/Elemental/Models/ElementSlider.ss -> the slider HTML for the element
+templates/NSWDPC/Elemental/Models/Slide.ss -> the slide HTML
 ```
+
+A `<figure>` tag is a good choice represent the slide. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/figure for examples with and without images.

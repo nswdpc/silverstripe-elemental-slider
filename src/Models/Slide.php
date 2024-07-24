@@ -18,19 +18,49 @@ use NSWDPC\Elemental\Models\Slider\ElementSlider;
  */
 class Slide extends DataObject {
 
+    /**
+     * @inheritdoc
+     */
     private static $table_name = 'Slide';
 
+    /**
+     * @inheritdoc
+     */
     private static $versioned_gridfield_extensions = true;
 
+    /**
+     * @inheritdoc
+     */
     private static $singular_name = 'Slide';
+
+    /**
+     * @inheritdoc
+     */
     private static $plural_name = 'Slides';
 
+    /**
+     * @inheritdoc
+     */
     private static $default_sort = 'Sort';
 
+    /**
+     * @inheritdoc
+     */
     private static $allowed_file_types = ["jpg","jpeg","gif","png","webp"];
+
+    /**
+     * @inheritdoc
+     */
     private static $default_thumb_width = 128;
+
+    /**
+     * @inheritdoc
+     */
     private static $default_thumb_height = 96;
 
+    /**
+     * @inheritdoc
+     */
     private static $db = [
         'Title' => 'Varchar(255)',
         'Content' => 'Text',
@@ -39,12 +69,18 @@ class Slide extends DataObject {
         'Height' => 'Int'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $has_one = [
         'Image' => Image::class,
         'Link'  => Link::class,
         'Parent' => ElementSlider::class,
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $summary_fields = [
         'Image.CMSThumbnail' => 'Image',
         'Title' => 'Title',
@@ -54,20 +90,32 @@ class Slide extends DataObject {
         'Link.LinkURL' => 'Link URL'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $searchable_fields = [
         'Title' => 'PartialMatchFilter',
         'Content' => 'PartialMatchFilter'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $owns = [
         'Image'
     ];
 
+    /**
+     * @inheritdoc
+     */
     private static $extensions = [
         Versioned::class
     ];
 
-    public function getThumbWidth() {
+    /**
+     * Return thumbnail width value
+     */
+    public function getThumbWidth() : int{
         $width = $this->Width;
         if($width <= 0) {
             $width = $this->config()->get('default_thumb_width');
@@ -75,7 +123,10 @@ class Slide extends DataObject {
         return $width;
     }
 
-    public function getThumbHeight() {
+    /**
+     * Return thumbnail height value
+     */
+    public function getThumbHeight() : int {
         $height = $this->Height;
         if($height <= 0) {
             $height = $this->config()->get('default_thumb_height');
@@ -83,7 +134,10 @@ class Slide extends DataObject {
         return $height;
     }
 
-    public function getAllowedFileTypes() {
+    /**
+     * Return allowed file types
+     */
+    public function getAllowedFileTypes() : array {
         $types = $this->config()->get('allowed_file_types');
         if(empty($types)) {
             $types = ["jpg","jpeg","gif","png","webp"];
@@ -92,6 +146,9 @@ class Slide extends DataObject {
         return $types;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -99,10 +156,15 @@ class Slide extends DataObject {
         $this->Height = $this->getThumbHeight();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCMSFields() {
         $fields = parent::getCMSFields();
 
         $fields->removeByName(['LinkID', 'ParentID', 'Sort']);
+
+        $folderName = $this->Title . "-" . $this->ID;
 
         $fields->addFieldsToTab(
             'Root.Main', [
@@ -122,14 +184,16 @@ class Slide extends DataObject {
                 NumericField::create(
                     'Width',
                     _t(
-                        __CLASS__ . 'WIDTH', 'Thumbnail width'
-                    )
+                        __CLASS__ . 'THUMBNAIL_WIDTH', 'Thumbnail width'
+                    ),
+                    static::config()->get('default_thumb_width')
                 )->setHtml5(true),
                 NumericField::create(
                     'Height',
                     _t(
-                        __CLASS__ . 'WIDTH', 'Thumbnail height'
-                    )
+                        __CLASS__ . 'THUMBNAIL_HEIGHT', 'Thumbnail height'
+                    ),
+                    static::config()->get('default_thumb_height')
                 )->setHtml5(true),
                 UploadField::create(
                     'Image',
@@ -137,7 +201,7 @@ class Slide extends DataObject {
                         __CLASS__ . '.SLIDE_IMAGE',
                         'Image'
                     )
-                )->setFolderName('sliders/' . $this->ID)
+                )->setFolderName('sliders/' . $folderName)
                 ->setAllowedExtensions($this->getAllowedFileTypes())
                 ->setDescription(
                     sprintf(_t(
@@ -151,11 +215,17 @@ class Slide extends DataObject {
         return $fields;
     }
 
+    /**
+     * For gridfield extensions
+     */
     public function getMultiRecordEditingTitle() {
         return $this->singular_name();
     }
 
+    /**
+     * Render the slide into a template
+     */
     public function forTemplate() {
-        return $this->renderWith([$this->class, __CLASS__]);
+        return $this->renderWith(__CLASS__);
     }
 }
