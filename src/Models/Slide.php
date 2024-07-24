@@ -223,7 +223,7 @@ class Slide extends DataObject {
     }
 
     /**
-     * Render the slide int a template
+     * Render the slide into a template
      */
     public function forTemplate() {
         return $this->renderWith(__CLASS__);
