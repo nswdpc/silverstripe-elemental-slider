@@ -12,12 +12,10 @@
     "authors": [
         {
             "name": "Mark Taylor",
-            "homepage": "https://dpc.nsw.gov.au",
             "role": "Bon Vivant"
         },
         {
             "name": "James Ellis",
-            "homepage": "https://dpc.nsw.gov.au",
             "role": "Developer"
         }
     ],
@@ -33,5 +31,16 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "friendsofphp/php-cs-fixer": "^3"
+    },
+    "autoload": {
+        "psr-4": {
+            "NSWDPC\\Elemental\\Models\\Slider\\": [
+                "src/Models/Elements/",
+                "src/Models/"
+            ],
+            "NSWDPC\\Elemental\\Tests\\Slider\\": [
+                "tests/"
+            ]
+        }
     }
 }
