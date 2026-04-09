@@ -1,4 +1,5 @@
 <?php
+
 namespace NSWDPC\Elemental\Models\Slider;
 
 use SilverStripe\Versioned\Versioned;
@@ -6,62 +7,71 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TextareaField;
 use gorriecoe\Link\Models\Link;
 use NSWDPC\InlineLinker\InlineLinkCompositeField;
 
-use NSWDPC\Elemental\Models\Slider\ElementSlider;
-
 /**
  * Images in an ElementSlider
+ * @property string $Title
+ * @property ?string $Content
+ * @property int $Sort
+ * @property int $Width
+ * @property int $Height
+ * @property int $ImageID
+ * @property int $LinkID
+ * @property int $ParentID
+ * @method \SilverStripe\Assets\Image Image()
+ * @method \gorriecoe\Link\Models\Link Link()
+ * @method \NSWDPC\Elemental\Models\Slider\ElementSlider Parent()
+ * @mixin \SilverStripe\Versioned\Versioned
  */
-class Slide extends DataObject {
+class Slide extends DataObject
+{
+    /**
+     * @inheritdoc
+     */
+    private static string $table_name = 'Slide';
 
     /**
      * @inheritdoc
      */
-    private static $table_name = 'Slide';
+    private static bool $versioned_gridfield_extensions = true;
 
     /**
      * @inheritdoc
      */
-    private static $versioned_gridfield_extensions = true;
+    private static string $singular_name = 'Slide';
 
     /**
      * @inheritdoc
      */
-    private static $singular_name = 'Slide';
+    private static string $plural_name = 'Slides';
 
     /**
      * @inheritdoc
      */
-    private static $plural_name = 'Slides';
+    private static string $default_sort = 'Sort';
 
     /**
      * @inheritdoc
      */
-    private static $default_sort = 'Sort';
+    private static array $allowed_file_types = ["jpg","jpeg","gif","png","webp"];
 
     /**
      * @inheritdoc
      */
-    private static $allowed_file_types = ["jpg","jpeg","gif","png","webp"];
+    private static int $default_thumb_width = 128;
 
     /**
      * @inheritdoc
      */
-    private static $default_thumb_width = 128;
+    private static int $default_thumb_height = 96;
 
     /**
      * @inheritdoc
      */
-    private static $default_thumb_height = 96;
-
-    /**
-     * @inheritdoc
-     */
-    private static $db = [
+    private static array $db = [
         'Title' => 'Varchar(255)',
         'Content' => 'Text',
         'Sort' => 'Int',
@@ -72,7 +82,7 @@ class Slide extends DataObject {
     /**
      * @inheritdoc
      */
-    private static $has_one = [
+    private static array $has_one = [
         'Image' => Image::class,
         'Link'  => Link::class,
         'Parent' => ElementSlider::class,
@@ -81,7 +91,7 @@ class Slide extends DataObject {
     /**
      * @inheritdoc
      */
-    private static $summary_fields = [
+    private static array $summary_fields = [
         'Image.CMSThumbnail' => 'Image',
         'Title' => 'Title',
         'Width' => 'Width',
@@ -93,7 +103,7 @@ class Slide extends DataObject {
     /**
      * @inheritdoc
      */
-    private static $searchable_fields = [
+    private static array $searchable_fields = [
         'Title' => 'PartialMatchFilter',
         'Content' => 'PartialMatchFilter'
     ];
@@ -101,54 +111,60 @@ class Slide extends DataObject {
     /**
      * @inheritdoc
      */
-    private static $owns = [
+    private static array $owns = [
         'Image'
     ];
 
     /**
      * @inheritdoc
      */
-    private static $extensions = [
+    private static array $extensions = [
         Versioned::class
     ];
 
     /**
      * Return thumbnail width value
      */
-    public function getThumbWidth() : int{
+    public function getThumbWidth(): int
+    {
         $width = $this->Width;
-        if($width <= 0) {
+        if ($width <= 0) {
             $width = $this->config()->get('default_thumb_width');
         }
+
         return $width;
     }
 
     /**
      * Return thumbnail height value
      */
-    public function getThumbHeight() : int {
+    public function getThumbHeight(): int
+    {
         $height = $this->Height;
-        if($height <= 0) {
+        if ($height <= 0) {
             $height = $this->config()->get('default_thumb_height');
         }
+
         return $height;
     }
 
     /**
      * Return allowed file types
      */
-    public function getAllowedFileTypes() : array {
+    public function getAllowedFileTypes(): array
+    {
         $types = $this->config()->get('allowed_file_types');
-        if(empty($types)) {
+        if (empty($types)) {
             $types = ["jpg","jpeg","gif","png","webp"];
         }
-        $types = array_unique($types);
-        return $types;
+
+        return array_unique($types);
     }
 
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -159,7 +175,9 @@ class Slide extends DataObject {
     /**
      * @inheritdoc
      */
-    public function getCMSFields() {
+    #[\Override]
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         $fields->removeByName(['LinkID', 'ParentID', 'Sort']);
@@ -167,45 +185,50 @@ class Slide extends DataObject {
         $folderName = $this->Title . "-" . $this->ID;
 
         $fields->addFieldsToTab(
-            'Root.Main', [
+            'Root.Main',
+            [
                 TextareaField::create(
                     'Content',
                     _t(
-                        __CLASS__ . 'CONTENT', 'Content'
+                        self::class . 'CONTENT',
+                        'Content'
                     )
                 ),
                 InlineLinkCompositeField::create(
                     'Link',
                     _t(
-                        __CLASS__ . 'LINK', 'Link'
+                        self::class . 'LINK',
+                        'Link'
                     ),
                     $this->owner
                 ),
                 NumericField::create(
                     'Width',
                     _t(
-                        __CLASS__ . 'THUMBNAIL_WIDTH', 'Thumbnail width'
+                        self::class . 'THUMBNAIL_WIDTH',
+                        'Thumbnail width'
                     ),
                     static::config()->get('default_thumb_width')
                 )->setHtml5(true),
                 NumericField::create(
                     'Height',
                     _t(
-                        __CLASS__ . 'THUMBNAIL_HEIGHT', 'Thumbnail height'
+                        self::class . 'THUMBNAIL_HEIGHT',
+                        'Thumbnail height'
                     ),
                     static::config()->get('default_thumb_height')
                 )->setHtml5(true),
                 UploadField::create(
                     'Image',
                     _t(
-                        __CLASS__ . '.SLIDE_IMAGE',
+                        self::class . '.SLIDE_IMAGE',
                         'Image'
                     )
                 )->setFolderName('sliders/' . $folderName)
                 ->setAllowedExtensions($this->getAllowedFileTypes())
                 ->setDescription(
                     sprintf(_t(
-                        __CLASS__ . 'ALLOWED_FILE_TYPES',
+                        self::class . 'ALLOWED_FILE_TYPES',
                         'Allowed file types: %s'
                     ), implode(",", $this->getAllowedFileTypes()))
                 )
@@ -218,14 +241,16 @@ class Slide extends DataObject {
     /**
      * For gridfield extensions
      */
-    public function getMultiRecordEditingTitle() {
+    public function getMultiRecordEditingTitle()
+    {
         return $this->singular_name();
     }
 
     /**
      * Render the slide into a template
      */
-    public function forTemplate() {
-        return $this->renderWith(__CLASS__);
+    public function forTemplate()
+    {
+        return $this->renderWith(self::class);
     }
 }

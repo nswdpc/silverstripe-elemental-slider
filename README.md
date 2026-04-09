@@ -1,20 +1,16 @@
 # Content slider element for Silverstripe
 
-Element to create a content slider. Each element can a number of slides made up of title, text, an image, a link or a mix of all three.
+A content block to create a content slider. Each element can have a number of slides made up of title, text, an image, a link or a mix of all three.
 
-The module does not supply any CSS or JS requirements, your project should these via the `sliderRequirements` extension method.
+The module does not supply any CSS or JS frontend requirements, your project should set these via the `sliderRequirements` extension method.
 
-[Further documentation](./docs/en/001_index.md)
-
-## Requirements
-
-See [composer.json](./composer.json)
+[Further documentation](./docs/en/001_index.md).
 
 ## Installation
 
 Install using composer:
 
-```shell
+```sh
 composer require nswdpc/silverstripe-elemental-slider
 ```
 
@@ -24,7 +20,7 @@ composer require nswdpc/silverstripe-elemental-slider
 
 ## Maintainers
 
-+ [dpcdigital@NSWDPC:~$](https://dpc.nsw.gov.au)
+PD Web Team
 
 ## Security
 
