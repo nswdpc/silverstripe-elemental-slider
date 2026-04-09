@@ -9,7 +9,6 @@ use SilverStripe\Dev\SapphireTest;
 
 class SlideTest extends SapphireTest
 {
-
     protected $usesDatabase = true;
 
     public function testSlideWidth(): void
@@ -23,7 +22,7 @@ class SlideTest extends SapphireTest
         $slide->publishSingle();
 
         $width = $slide->getThumbWidth();
-        $this->assertEquals(640,$width);
+        $this->assertEquals(640, $width);
     }
 
     public function testSlideHeight(): void
@@ -37,7 +36,7 @@ class SlideTest extends SapphireTest
         $slide->publishSingle();
 
         $height = $slide->getThumbHeight();
-        $this->assertEquals(480,$height);
+        $this->assertEquals(480, $height);
     }
 
     public function testSlideDimensions(): void
@@ -51,22 +50,22 @@ class SlideTest extends SapphireTest
         $slide->publishSingle();
 
         $height = $slide->getThumbHeight();
-        $this->assertEquals(600,$height);
+        $this->assertEquals(600, $height);
         $width = $slide->getThumbWidth();
-        $this->assertEquals(960,$width);
+        $this->assertEquals(960, $width);
     }
 
-        public function testSlideDefaultDimensions(): void
-        {
-            $slide = Slide::create([
-                'Title' => 'Slide test default dimensions',
-            ]);
-            $slide->write();
-            $slide->publishSingle();
+    public function testSlideDefaultDimensions(): void
+    {
+        $slide = Slide::create([
+            'Title' => 'Slide test default dimensions',
+        ]);
+        $slide->write();
+        $slide->publishSingle();
 
-            $height = $slide->getThumbHeight();
-            $this->assertEquals(Slide::config()->get('default_thumb_height'),$height);
-            $width = $slide->getThumbWidth();
-            $this->assertEquals(Slide::config()->get('default_thumb_width'),$width);
-        }
+        $height = $slide->getThumbHeight();
+        $this->assertEquals(Slide::config()->get('default_thumb_height'), $height);
+        $width = $slide->getThumbWidth();
+        $this->assertEquals(Slide::config()->get('default_thumb_width'), $width);
+    }
 }
