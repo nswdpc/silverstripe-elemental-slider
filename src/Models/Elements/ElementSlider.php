@@ -95,7 +95,7 @@ class ElementSlider extends ElementContent
      * @inheritDoc
      */
     #[\Override]
-    public function forTemplate($holder = true)
+    public function forTemplate($holder = true): string
     {
         $this->addSliderRequirements();
         return parent::forTemplate($holder);
