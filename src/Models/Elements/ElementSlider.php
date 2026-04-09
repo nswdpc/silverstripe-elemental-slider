@@ -174,7 +174,7 @@ class ElementSlider extends ElementContent
     /**
      * @inheritdoc
      */
-    public function SortedSlides()
+    public function SortedSlides(): \SilverStripe\ORM\DataList
     {
         return $this->Slides()->Sort('Sort');
     }

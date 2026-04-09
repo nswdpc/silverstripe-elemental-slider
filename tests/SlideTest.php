@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NSWDPC\Elemental\Tests\Slider;
 
 use NSWDPC\Elemental\Models\Slider\Slide;
