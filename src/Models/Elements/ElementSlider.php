@@ -1,17 +1,13 @@
 <?php
+
 namespace NSWDPC\Elemental\Models\Slider;
 
-use NSWDPC\Elemental\Models\Slider\Slide;
 use DNADesign\Elemental\Models\ElementContent;
 use gorriecoe\Link\Models\Link;
 use NSWDPC\InlineLinker\InlineLinkCompositeField;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\Forms\TextareaField;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 /**
@@ -21,8 +17,8 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
  * @method \gorriecoe\Link\Models\Link HeroLink()
  * @method \SilverStripe\ORM\HasManyList<\NSWDPC\Elemental\Models\Slider\Slide> Slides()
  */
-class ElementSlider extends ElementContent {
-
+class ElementSlider extends ElementContent
+{
     /**
      * @inheritdoc
      */
@@ -109,7 +105,8 @@ class ElementSlider extends ElementContent {
      * Provides an extension method 'sliderRequirements' where Requirements can
      * be added to handle slider content
      */
-    protected function addSliderRequirements() {
+    protected function addSliderRequirements()
+    {
         $this->extend('sliderRequirements');
     }
 
@@ -124,25 +121,26 @@ class ElementSlider extends ElementContent {
 
         $fields->addFieldToTab(
             'Root.Main',
-                CheckboxField::create(
-                    'HomepageHero',
-                    _t(
-                        self::class . 'HOMEPAGE_HERO',
-                        "The context for this slider is a 'hero'"
-                    )
+            CheckboxField::create(
+                'HomepageHero',
+                _t(
+                    self::class . 'HOMEPAGE_HERO',
+                    "The context for this slider is a 'hero'"
                 )
+            )
         );
 
         $fields->addFieldToTab(
             'Root.Main',
-                $this->getLinkField()
+            $this->getLinkField()
         );
 
         if ($this->isInDB()) {
             $field = GridField::create(
                 'Slides',
                 _t(
-                    self::class . 'SLIDES', 'Slides'
+                    self::class . 'SLIDES',
+                    'Slides'
                 ),
                 $this->Slides(),
                 GridFieldConfig_RelationEditor::create()
@@ -161,7 +159,8 @@ class ElementSlider extends ElementContent {
     /**
      * @inheritdoc
      */
-    protected function getLinkField() {
+    protected function getLinkField()
+    {
         return InlineLinkCompositeField::create(
             'HeroLink',
             _t(
@@ -175,7 +174,8 @@ class ElementSlider extends ElementContent {
     /**
      * @inheritdoc
      */
-    public function SortedSlides() {
+    public function SortedSlides()
+    {
         return $this->Slides()->Sort('Sort');
     }
 

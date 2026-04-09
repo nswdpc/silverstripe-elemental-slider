@@ -1,4 +1,5 @@
 <?php
+
 namespace NSWDPC\Elemental\Models\Slider;
 
 use SilverStripe\Versioned\Versioned;
@@ -6,12 +7,9 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TextareaField;
 use gorriecoe\Link\Models\Link;
 use NSWDPC\InlineLinker\InlineLinkCompositeField;
-
-use NSWDPC\Elemental\Models\Slider\ElementSlider;
 
 /**
  * Images in an ElementSlider
@@ -28,8 +26,8 @@ use NSWDPC\Elemental\Models\Slider\ElementSlider;
  * @method \NSWDPC\Elemental\Models\Slider\ElementSlider Parent()
  * @mixin \SilverStripe\Versioned\Versioned
  */
-class Slide extends DataObject {
-
+class Slide extends DataObject
+{
     /**
      * @inheritdoc
      */
@@ -127,9 +125,10 @@ class Slide extends DataObject {
     /**
      * Return thumbnail width value
      */
-    public function getThumbWidth() : int{
+    public function getThumbWidth(): int
+    {
         $width = $this->Width;
-        if($width <= 0) {
+        if ($width <= 0) {
             $width = $this->config()->get('default_thumb_width');
         }
 
@@ -139,9 +138,10 @@ class Slide extends DataObject {
     /**
      * Return thumbnail height value
      */
-    public function getThumbHeight() : int {
+    public function getThumbHeight(): int
+    {
         $height = $this->Height;
-        if($height <= 0) {
+        if ($height <= 0) {
             $height = $this->config()->get('default_thumb_height');
         }
 
@@ -151,9 +151,10 @@ class Slide extends DataObject {
     /**
      * Return allowed file types
      */
-    public function getAllowedFileTypes() : array {
+    public function getAllowedFileTypes(): array
+    {
         $types = $this->config()->get('allowed_file_types');
-        if(empty($types)) {
+        if (empty($types)) {
             $types = ["jpg","jpeg","gif","png","webp"];
         }
         return array_unique($types);
@@ -174,7 +175,8 @@ class Slide extends DataObject {
      * @inheritdoc
      */
     #[\Override]
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         $fields->removeByName(['LinkID', 'ParentID', 'Sort']);
@@ -182,31 +184,36 @@ class Slide extends DataObject {
         $folderName = $this->Title . "-" . $this->ID;
 
         $fields->addFieldsToTab(
-            'Root.Main', [
+            'Root.Main',
+            [
                 TextareaField::create(
                     'Content',
                     _t(
-                        self::class . 'CONTENT', 'Content'
+                        self::class . 'CONTENT',
+                        'Content'
                     )
                 ),
                 InlineLinkCompositeField::create(
                     'Link',
                     _t(
-                        self::class . 'LINK', 'Link'
+                        self::class . 'LINK',
+                        'Link'
                     ),
                     $this->owner
                 ),
                 NumericField::create(
                     'Width',
                     _t(
-                        self::class . 'THUMBNAIL_WIDTH', 'Thumbnail width'
+                        self::class . 'THUMBNAIL_WIDTH',
+                        'Thumbnail width'
                     ),
                     static::config()->get('default_thumb_width')
                 )->setHtml5(true),
                 NumericField::create(
                     'Height',
                     _t(
-                        self::class . 'THUMBNAIL_HEIGHT', 'Thumbnail height'
+                        self::class . 'THUMBNAIL_HEIGHT',
+                        'Thumbnail height'
                     ),
                     static::config()->get('default_thumb_height')
                 )->setHtml5(true),
@@ -233,14 +240,16 @@ class Slide extends DataObject {
     /**
      * For gridfield extensions
      */
-    public function getMultiRecordEditingTitle() {
+    public function getMultiRecordEditingTitle()
+    {
         return $this->singular_name();
     }
 
     /**
      * Render the slide into a template
      */
-    public function forTemplate() {
+    public function forTemplate()
+    {
         return $this->renderWith(self::class);
     }
 }
