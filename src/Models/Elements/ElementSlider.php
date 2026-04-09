@@ -42,7 +42,7 @@ class ElementSlider extends ElementContent
     /**
      * @inheritdoc
      */
-    private static string $description = "Display one or more slides with optional hero";
+    private static string $class_description = "Display one or more slides with optional hero";
 
     /**
      * @inheritdoc
