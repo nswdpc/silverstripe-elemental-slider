@@ -16,83 +16,89 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 /**
  * ElementSlider adds a content slider via a sortable upload field
+ * @property bool $HomepageHero
+ * @property int $HeroLinkID
+ * @method \gorriecoe\Link\Models\Link HeroLink()
+ * @method \SilverStripe\ORM\HasManyList<\NSWDPC\Elemental\Models\Slider\Slide> Slides()
  */
 class ElementSlider extends ElementContent {
 
     /**
      * @inheritdoc
      */
-    private static $icon = 'font-icon-picture';
+    private static string $icon = 'font-icon-picture';
 
     /**
      * @inheritdoc
      */
-    private static $inline_editable = false;
+    private static bool $inline_editable = false;
 
     /**
      * @inheritdoc
      */
-    private static $table_name = 'ElementSlider';
+    private static string $table_name = 'ElementSlider';
 
     /**
      * @inheritdoc
      */
-    private static $title = 'Content slider';
+    private static string $title = 'Content slider';
 
     /**
      * @inheritdoc
      */
-    private static $description = "Display one or more slides with optional hero";
+    private static string $description = "Display one or more slides with optional hero";
 
     /**
      * @inheritdoc
      */
-    private static $singular_name = 'Slider';
+    private static string $singular_name = 'Slider';
 
     /**
      * @inheritdoc
      */
-    private static $plural_name = 'Sliders';
+    private static string $plural_name = 'Sliders';
 
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getType()
     {
-        return _t(__CLASS__ . '.BlockType', 'Content slider');
+        return _t(self::class . '.BlockType', 'Content slider');
     }
 
     /**
      * @inheritdoc
      */
-    private static $db = [
+    private static array $db = [
         'HomepageHero' => 'Boolean'
     ];
 
     /**
      * @inheritdoc
      */
-    private static $has_one = [
+    private static array $has_one = [
         'HeroLink' => Link::class
     ];
 
     /**
      * @inheritdoc
      */
-    private static $has_many = [
+    private static array $has_many = [
         'Slides' => Slide::class,
     ];
 
     /**
      * @inheritdoc
      */
-    private static $owns = [
+    private static array $owns = [
         'Slides'
     ];
 
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function forTemplate($holder = true)
     {
         $this->addSliderRequirements();
@@ -110,6 +116,7 @@ class ElementSlider extends ElementContent {
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function getCMSFields()
     {
         $fields = parent::getCmsFields();
@@ -120,8 +127,8 @@ class ElementSlider extends ElementContent {
                 CheckboxField::create(
                     'HomepageHero',
                     _t(
-                        __CLASS__ . 'HOMEPAGE_HERO',
-                        'The context for this slider is a \'hero\''
+                        self::class . 'HOMEPAGE_HERO',
+                        "The context for this slider is a 'hero'"
                     )
                 )
         );
@@ -135,7 +142,7 @@ class ElementSlider extends ElementContent {
             $field = GridField::create(
                 'Slides',
                 _t(
-                    __CLASS__ . 'SLIDES', 'Slides'
+                    self::class . 'SLIDES', 'Slides'
                 ),
                 $this->Slides(),
                 GridFieldConfig_RelationEditor::create()
@@ -155,15 +162,14 @@ class ElementSlider extends ElementContent {
      * @inheritdoc
      */
     protected function getLinkField() {
-        $field = InlineLinkCompositeField::create(
+        return InlineLinkCompositeField::create(
             'HeroLink',
             _t(
-                __CLASS__ . '.LINK',
+                self::class . '.LINK',
                 'Link'
             ),
             $this
         );
-        return $field;
     }
 
     /**
