@@ -17,24 +17,14 @@
             "name": "James Ellis"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/nswdpc/silverstripe-link.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/nswdpc/silverstripe-linkfield.git"
-        }
-    ],
     "require": {
         "symbiote/silverstripe-gridfieldextensions" : "^5",
-        "gorriecoe/silverstripe-linkfield" : "dev-ss6",
+        "nswdpc/silverstripe-linkfield" : "^2",
         "dnadesign/silverstripe-elemental": "^6",
         "bummzack/sortablefile" : "^3",
         "silverstripe/assets" : "^3",
         "silverstripe/asset-admin" : "^3",
-        "nswdpc/silverstripe-inline-linker": "dev-ss6"
+        "nswdpc/silverstripe-inline-linker": "^2"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5",
