@@ -1,0 +1,11 @@
+---
+Name: nswdpc-elemental-slider-linkmigration
+Only:
+  classexists: 'gorriecoe\LinkField\Migration\LinkMigrator'
+---
+gorriecoe\LinkField\Migration\LinkMigrator:
+  relation_map:
+    NSWDPC\Elemental\Models\Slider\ElementSlider:
+      HeroLink: CoreHeroLink
+    NSWDPC\Elemental\Models\Slider\Slide:
+      Link: CoreLink
