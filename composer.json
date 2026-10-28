@@ -19,12 +19,11 @@
     ],
     "require": {
         "symbiote/silverstripe-gridfieldextensions" : "^5",
-        "nswdpc/silverstripe-linkfield" : "^2",
+        "nswdpc/silverstripe-linkfield" : "dev-feat-link-migrator-staged as 2.1.0",
         "dnadesign/silverstripe-elemental": "^6",
         "bummzack/sortablefile" : "^3",
         "silverstripe/assets" : "^3",
-        "silverstripe/asset-admin" : "^3",
-        "nswdpc/silverstripe-inline-linker": "^2"
+        "silverstripe/asset-admin" : "^3"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5",

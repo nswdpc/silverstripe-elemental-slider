@@ -6,9 +6,9 @@
         <% if $HTML %>
         {$HTML}
         <% end_if %>
-        <% if $HeroLink %>
-            <% with $HeroLink %>
-                <p><a href="{$LinkURL}">{$Title}</a></p>
+        <% if $DerivedHeroLink %>
+            <% with $DerivedHeroLink %>
+                <p><a href="{$LinkURL}"<% if $OpenInNewWindow %> target="_blank"<% end_if %>>{$Title}</a></p>
             <% end_with %>
         <% end_if %>
     </div>
