@@ -19,7 +19,7 @@
     ],
     "require": {
         "symbiote/silverstripe-gridfieldextensions" : "^5",
-        "nswdpc/silverstripe-linkfield" : "dev-feat-link-migrator-staged as 2.1.0",
+        "nswdpc/silverstripe-linkfield" : "^2.1.0",
         "dnadesign/silverstripe-elemental": "^6",
         "bummzack/sortablefile" : "^3",
         "silverstripe/assets" : "^3",
