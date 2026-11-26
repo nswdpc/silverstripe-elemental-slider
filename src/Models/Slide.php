@@ -9,7 +9,9 @@ use SilverStripe\Assets\Image;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextareaField;
 use gorriecoe\Link\Models\Link;
-use NSWDPC\InlineLinker\InlineLinkCompositeField;
+use gorriecoe\LinkField\LinkField;
+use SilverStripe\LinkField\Models\Link as CoreLink;
+use SilverStripe\LinkField\Form\LinkField as CoreLinkField;
 
 /**
  * Images in an ElementSlider
@@ -23,6 +25,8 @@ use NSWDPC\InlineLinker\InlineLinkCompositeField;
  * @property int $ParentID
  * @method \SilverStripe\Assets\Image Image()
  * @method \gorriecoe\Link\Models\Link Link()
+ * @method \SilverStripe\LinkField\Models\Link CoreLink()
+ * @property int $CoreLinkID
  * @method \NSWDPC\Elemental\Models\Slider\ElementSlider Parent()
  * @mixin \SilverStripe\Versioned\Versioned
  */
@@ -85,6 +89,7 @@ class Slide extends DataObject
     private static array $has_one = [
         'Image' => Image::class,
         'Link'  => Link::class,
+        'CoreLink' => CoreLink::class,
         'Parent' => ElementSlider::class,
     ];
 
@@ -112,7 +117,16 @@ class Slide extends DataObject
      * @inheritdoc
      */
     private static array $owns = [
-        'Image'
+        'Image',
+        'CoreLink'
+    ];
+
+    private static array $cascade_deletes = [
+        'CoreLink'
+    ];
+
+    private static array $cascade_duplicates = [
+        'CoreLink'
     ];
 
     /**
@@ -121,6 +135,14 @@ class Slide extends DataObject
     private static array $extensions = [
         Versioned::class
     ];
+
+    /**
+     * template method
+     */
+    public function ThumbWidth(): int
+    {
+        return $this->getThumbWidth();
+    }
 
     /**
      * Return thumbnail width value
@@ -132,7 +154,15 @@ class Slide extends DataObject
             $width = $this->config()->get('default_thumb_width');
         }
 
-        return $width;
+        return (int) $width;
+    }
+
+    /**
+     * template method
+     */
+    public function ThumbHeight(): int
+    {
+        return $this->getThumbHeight();
     }
 
     /**
@@ -145,7 +175,7 @@ class Slide extends DataObject
             $height = $this->config()->get('default_thumb_height');
         }
 
-        return $height;
+        return (int) $height;
     }
 
     /**
@@ -180,7 +210,7 @@ class Slide extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName(['LinkID', 'ParentID', 'Sort']);
+        $fields->removeByName(['LinkID', 'Link', 'CoreLink', 'ParentID', 'Sort']);
 
         $folderName = $this->Title . "-" . $this->ID;
 
@@ -194,14 +224,7 @@ class Slide extends DataObject
                         'Content'
                     )
                 ),
-                InlineLinkCompositeField::create(
-                    'Link',
-                    _t(
-                        self::class . 'LINK',
-                        'Link'
-                    ),
-                    $this->owner
-                ),
+                $this->getLinkField(),
                 NumericField::create(
                     'Width',
                     _t(
@@ -253,5 +276,42 @@ class Slide extends DataObject
     public function forTemplate(): string
     {
         return $this->renderWith(self::class);
+    }
+
+    /**
+     * Return the field used to render the link
+     * based on migration state
+     */
+    protected function getLinkField(): CoreLinkField|LinkField
+    {
+        $link = $this->getDerivedLink();
+        if ($link instanceof CoreLink) {
+            return CoreLinkField::create('CoreLink', _t(self::class . 'LINK', 'Link'));
+        }
+
+        return LinkField::create('Link', _t(self::class . 'LINK', 'Link'), $this);
+    }
+
+    /**
+     * Template method
+     */
+    public function DerivedLink(): CoreLink|Link
+    {
+        return $this->getDerivedLink();
+    }
+
+    /**
+     * Returns the relevant link based on migration status
+     */
+    public function getDerivedLink(): CoreLink|Link
+    {
+        $coreLink = $this->CoreLink();
+        /** @var Link $legacyLink */
+        $legacyLink = $this->getComponent('Link');
+        if ($coreLink->isInDB() || !$legacyLink->isInDB()) {
+            return $coreLink;
+        }
+
+        return $legacyLink;
     }
 }
