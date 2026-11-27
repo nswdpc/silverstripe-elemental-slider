@@ -8,8 +8,6 @@ use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextareaField;
-use gorriecoe\Link\Models\Link;
-use gorriecoe\LinkField\LinkField;
 use SilverStripe\LinkField\Models\Link as CoreLink;
 use SilverStripe\LinkField\Form\LinkField as CoreLinkField;
 
@@ -21,10 +19,8 @@ use SilverStripe\LinkField\Form\LinkField as CoreLinkField;
  * @property int $Width
  * @property int $Height
  * @property int $ImageID
- * @property int $LinkID
  * @property int $ParentID
  * @method \SilverStripe\Assets\Image Image()
- * @method \gorriecoe\Link\Models\Link Link()
  * @method \SilverStripe\LinkField\Models\Link CoreLink()
  * @property int $CoreLinkID
  * @method \NSWDPC\Elemental\Models\Slider\ElementSlider Parent()
@@ -88,7 +84,6 @@ class Slide extends DataObject
      */
     private static array $has_one = [
         'Image' => Image::class,
-        'Link'  => Link::class,
         'CoreLink' => CoreLink::class,
         'Parent' => ElementSlider::class,
     ];
@@ -101,8 +96,7 @@ class Slide extends DataObject
         'Title' => 'Title',
         'Width' => 'Width',
         'Height' => 'Height',
-        'Link.TypeLabel' => 'Link type',
-        'Link.LinkURL' => 'Link URL'
+        'CoreLink.URL' => 'Link URL'
     ];
 
     /**
@@ -210,7 +204,7 @@ class Slide extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        $fields->removeByName(['LinkID', 'Link', 'CoreLink', 'ParentID', 'Sort']);
+        $fields->removeByName(['CoreLink', 'ParentID', 'Sort']);
 
         $folderName = $this->Title . "-" . $this->ID;
 
@@ -282,20 +276,15 @@ class Slide extends DataObject
      * Return the field used to render the link
      * based on migration state
      */
-    protected function getLinkField(): CoreLinkField|LinkField
+    protected function getLinkField(): CoreLinkField
     {
-        $link = $this->getDerivedLink();
-        if ($link instanceof CoreLink) {
-            return CoreLinkField::create('CoreLink', _t(self::class . 'LINK', 'Link'));
-        }
-
-        return LinkField::create('Link', _t(self::class . 'LINK', 'Link'), $this);
+        return CoreLinkField::create('CoreLink', _t(self::class . 'LINK', 'Link'));
     }
 
     /**
      * Template method
      */
-    public function DerivedLink(): CoreLink|Link
+    public function DerivedLink(): ?CoreLink
     {
         return $this->getDerivedLink();
     }
@@ -303,15 +292,16 @@ class Slide extends DataObject
     /**
      * Returns the relevant link based on migration status
      */
-    public function getDerivedLink(): CoreLink|Link
+    public function getDerivedLink(): ?CoreLink
     {
-        $coreLink = $this->CoreLink();
-        /** @var Link $legacyLink */
-        $legacyLink = $this->getComponent('Link');
-        if ($coreLink->isInDB() || !$legacyLink->isInDB()) {
-            return $coreLink;
-        }
+        return $this->CoreLink();
+    }
 
-        return $legacyLink;
+    /**
+     * BC method
+     */
+    public function getLink(): ?CoreLink
+    {
+        return $this->getDerivedLink();
     }
 }
