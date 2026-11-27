@@ -8,7 +8,7 @@
         <% end_if %>
         <% if $DerivedHeroLink %>
             <% with $DerivedHeroLink %>
-                <p><a href="{$LinkURL}"<% if $OpenInNewWindow %> target="_blank"<% end_if %>>{$Title}</a></p>
+                <p><a href="{$URL}" rel="noopener noreferrer"<% if $OpenInNew %> target="_blank"<% end_if %>>{$Title}</a></p>
             <% end_with %>
         <% end_if %>
     </div>

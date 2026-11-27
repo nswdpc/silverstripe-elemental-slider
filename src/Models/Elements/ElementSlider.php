@@ -3,8 +3,6 @@
 namespace NSWDPC\Elemental\Models\Slider;
 
 use DNADesign\Elemental\Models\ElementContent;
-use gorriecoe\Link\Models\Link;
-use gorriecoe\LinkField\LinkField;
 use SilverStripe\LinkField\Models\Link as CoreLink;
 use SilverStripe\LinkField\Form\LinkField as CoreLinkField;
 use SilverStripe\Forms\GridField\GridField;
@@ -15,8 +13,6 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 /**
  * ElementSlider adds a content slider via a sortable upload field
  * @property bool $HomepageHero
- * @property int $HeroLinkID
- * @method \gorriecoe\Link\Models\Link HeroLink()
  * @method \SilverStripe\LinkField\Models\Link CoreHeroLink()
  * @property int $CoreHeroLinkID
  * @method \SilverStripe\ORM\HasManyList<\NSWDPC\Elemental\Models\Slider\Slide> Slides()
@@ -78,7 +74,6 @@ class ElementSlider extends ElementContent
      * @inheritdoc
      */
     private static array $has_one = [
-        'HeroLink' => Link::class,
         'CoreHeroLink' => CoreLink::class
     ];
 
@@ -131,7 +126,6 @@ class ElementSlider extends ElementContent
     public function getCMSFields()
     {
         $fields = parent::getCmsFields();
-        $fields->removeByName(['HeroLinkID']);
 
         $fields->addFieldToTab(
             'Root.Main',
@@ -144,7 +138,7 @@ class ElementSlider extends ElementContent
             )
         );
 
-        $fields->removeByName(['HeroLinkID', 'HeroLink', 'CoreHeroLink']);
+        $fields->removeByName(['CoreHeroLink']);
         $fields->addFieldToTab(
             'Root.Main',
             $this->getLinkField()
@@ -179,20 +173,15 @@ class ElementSlider extends ElementContent
      * Return the field used to render the link
      * based on migration state
      */
-    protected function getLinkField(): CoreLinkField|LinkField
+    protected function getLinkField(): CoreLinkField
     {
-        $link = $this->getDerivedHeroLink();
-        if ($link instanceof CoreLink) {
-            return CoreLinkField::create('CoreHeroLink', _t(self::class . 'LINK', 'Link'));
-        }
-
-        return LinkField::create('HeroLink', _t(self::class . 'LINK', 'Link'), $this);
+        return CoreLinkField::create('CoreHeroLink', _t(self::class . 'LINK', 'Link'));
     }
 
     /**
      * Template method
      */
-    public function DerivedHeroLink(): CoreLink|Link
+    public function DerivedHeroLink(): ?CoreLink
     {
         return $this->getDerivedHeroLink();
     }
@@ -200,16 +189,17 @@ class ElementSlider extends ElementContent
     /**
      * Returns the relevant link based on migration status
      */
-    public function getDerivedHeroLink(): CoreLink|Link
+    public function getDerivedHeroLink(): ?CoreLink
     {
-        $coreLink = $this->CoreHeroLink();
-        /** @var Link $legacyLink */
-        $legacyLink = $this->getComponent('HeroLink');
-        if ($coreLink->isInDB() || !$legacyLink->isInDB()) {
-            return $coreLink;
-        }
+        return $this->CoreHeroLink();
+    }
 
-        return $legacyLink;
+    /**
+     * BC method
+     */
+    public function getHeroLink(): ?CoreLink
+    {
+        return $this->getDerivedHeroLink();
     }
 
     /**
